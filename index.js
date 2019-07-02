@@ -5,12 +5,12 @@ const OktaJwtVerifier = require('@okta/jwt-verifier');
 
 exports.handler = function(event, context) {
     const accessTokenString = event.authorizationToken.split(' ')[1];
-    const parts = accessTokenString.split('.');
-    const unverified_payload = JSON.parse(atob(parts[1]));
+    // const parts = accessTokenString.split('.');
+    // const unverified_payload = JSON.parse(atob(parts[1]));
 
     var oktaJwtVerifier = new OktaJwtVerifier({
-      issuer: unverified_payload.iss,
-      clientId: unverified_payload.cid
+      issuer: 'https://udp.okta.com/oauth2/default',
+      clientId: '0oaqn1d0swkdkMJZA356'
     });
 
     oktaJwtVerifier.verifyAccessToken(accessTokenString)
@@ -24,7 +24,9 @@ exports.handler = function(event, context) {
         apiOptions.stage = apiGatewayArnPart[1];
 
         const policy = new AuthPolicy(jwt.claims.sub, awsAccountId, apiOptions);
+        // TODO: Lock it down
         policy.allowAllMethods();
+
         var builtPolicy = policy.build();
 
         const claims = jwt.claims;
@@ -43,6 +45,8 @@ exports.handler = function(event, context) {
 
         const oktaOrg = orgUrl.split('https://')[1];
         ctx.oktaOrg = JSON.stringify(oktaOrg);
+
+        buildPolicy.context = ctx;
 
         return context.succeed(builtPolicy);
     })
