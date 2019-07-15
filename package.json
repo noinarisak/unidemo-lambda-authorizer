@@ -12,7 +12,8 @@
   "dependencies": {
     "@okta/jwt-verifier": "0.0.15",
     "atob": "^2.1.2",
-    "aws-auth-policy": "^0.1.0"
+    "aws-auth-policy": "^0.1.0",
+    "dotenv": "^8.0.0"
   },
   "devDependencies": {
     "lambda-local": "^1.1.0",
